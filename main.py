@@ -15,12 +15,11 @@ import hydra
 from omegaconf import DictConfig
 
 _steps = [
-    "download",
+    "get_data",
     "basic_cleaning",
     "data_check",
-    "data_split",
+    "train_val_test_split",
     "train_random_forest",
-    # "test_regression_model"
 ]
 
 
@@ -41,7 +40,7 @@ def go(config: DictConfig):
     # Move to a temporary directory
     with tempfile.TemporaryDirectory() as tmp_dir:
 
-        if "download" in active_steps:
+        if "get_data" in active_steps:
             # Download file and load in W&B
             _ = mlflow.run(
                 f"{config['main']['components_repository']}/get_data",
@@ -81,7 +80,7 @@ def go(config: DictConfig):
                 },
             )
 
-        if "data_split" in active_steps:
+        if "train_val_test_split" in active_steps:
             _ = mlflow.run(
                 os.path.join(root_path, "src", "train_val_test_split"),
                 "main",
@@ -115,16 +114,6 @@ def go(config: DictConfig):
                     "rf_config": rf_config,
                     "max_tfidf_features": config["modeling"]["max_tfidf_features"],
                     "output_artifact": config["modeling"]["output_artifact"],
-                },
-            )
-
-        if "test_regression_model" in active_steps:
-            _ = mlflow.run(
-                os.path.join(root_path, "src", "test_regression_model"),
-                "main",
-                parameters={
-                    "mlflow_model": config["modeling"]["output_artifact"] + ":prod",
-                    "test_dataset": "test_data.csv:latest",
                 },
             )
 

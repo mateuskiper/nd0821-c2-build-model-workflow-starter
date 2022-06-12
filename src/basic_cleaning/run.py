@@ -50,7 +50,7 @@ def go(args):
         logging.error("Failed to read and clean dataset: {error}".format(error=error))
 
     else:
-        df.to_csv("clean_sample.csv")
+        df.to_csv("clean_sample.csv", index=False)
 
         artifact = wandb.Artifact(
             args.output_artifact,

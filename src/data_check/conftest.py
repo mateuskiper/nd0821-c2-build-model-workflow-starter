@@ -1,9 +1,15 @@
-import pytest
+"""
+Fixtures and configs for data_check step
+"""
 import pandas as pd
+import pytest
 import wandb
 
 
 def pytest_addoption(parser):
+    """
+    Parameter parser
+    """
     parser.addoption("--csv", action="store")
     parser.addoption("--ref", action="store")
     parser.addoption("--kl_threshold", action="store")
@@ -11,8 +17,11 @@ def pytest_addoption(parser):
     parser.addoption("--max_price", action="store")
 
 
-@pytest.fixture(scope='session')
-def data(request):
+@pytest.fixture(scope="session", name="data")
+def data_(request):
+    """
+    Get dataframe from csv provided
+    """
     run = wandb.init(job_type="data_tests", resume=True)
 
     # Download input artifact. This will also note that this script is using this
@@ -27,8 +36,11 @@ def data(request):
     return df
 
 
-@pytest.fixture(scope='session')
-def ref_data(request):
+@pytest.fixture(scope="session", name="ref_data")
+def ref_data_(request):
+    """
+    Get reference dataframe from csv provided
+    """
     run = wandb.init(job_type="data_tests", resume=True)
 
     # Download input artifact. This will also note that this script is using this
@@ -43,8 +55,11 @@ def ref_data(request):
     return df
 
 
-@pytest.fixture(scope='session')
-def kl_threshold(request):
+@pytest.fixture(scope="session", name="kl_threshold")
+def kl_threshold_(request):
+    """
+    KL threshold parameter manager
+    """
     kl_threshold = request.config.option.kl_threshold
 
     if kl_threshold is None:
@@ -52,8 +67,12 @@ def kl_threshold(request):
 
     return float(kl_threshold)
 
-@pytest.fixture(scope='session')
-def min_price(request):
+
+@pytest.fixture(scope="session", name="min_price")
+def min_price_(request):
+    """
+    Request parameter manager
+    """
     min_price = request.config.option.min_price
 
     if min_price is None:
@@ -61,8 +80,12 @@ def min_price(request):
 
     return float(min_price)
 
-@pytest.fixture(scope='session')
-def max_price(request):
+
+@pytest.fixture(scope="session", name="max_price")
+def max_price_(request):
+    """
+    Maximum price parameter manager
+    """
     max_price = request.config.option.max_price
 
     if max_price is None:

@@ -6,13 +6,11 @@ entry_points:
     parameters:
 
       mlflow_model:
-        description: ## ADD DESCRIPTION
+        description: An MLflow serialized model
         type: string
 
       test_dataset:
-        description: ## ADD DESCRIPTION
+        description: The test artifact
         type: string
 
-
-    command: >-
-        python run.py  --mlflow_model {mlflow_model}  --test_dataset {test_dataset} 
+    command: "python run.py  --mlflow_model {mlflow_model} --test_dataset {test_dataset}"} 

@@ -50,8 +50,7 @@ def go(args):
         logging.error("Failed to read and clean dataset: {error}".format(error=error))
 
     else:
-        tmp_artifact_path = os.path.join(args.tmp_directory, args.output_artifact)
-        df.to_csv(tmp_artifact_path)
+        df.to_csv("clean_sample.csv")
 
         artifact = wandb.Artifact(
             args.output_artifact,
@@ -59,7 +58,7 @@ def go(args):
             description=args.output_description,
         )
 
-        artifact.add_file(tmp_artifact_path)
+        artifact.add_file(args.output_artifact)
         run.log_artifact(artifact)
 
         artifact.wait()
@@ -69,13 +68,6 @@ def go(args):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="A very basic data cleaning")
-
-    parser.add_argument(
-        "--tmp_directory",
-        type=str,
-        help="Temporary directory for dataset storage",
-        required=True,
-    )
 
     parser.add_argument(
         "--input_artifact", type=str, help="Input artifact name", required=True

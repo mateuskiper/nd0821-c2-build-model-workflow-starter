@@ -13,7 +13,6 @@ def test_column_names(data):
     Define and retiurn the expected column names
     """
     expected_colums = [
-        "id",
         "name",
         "host_id",
         "host_name",
